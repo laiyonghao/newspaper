@@ -52,7 +52,7 @@ class Article(object):
                 'Configuration object being passed incorrectly as title or '
                 'source_url! Please verify `Article`s __init__() fn.')
 
-        self.calculate_best_node = kwargs.pop('calculate_best_node', None)
+        self.content_node_xpath = kwargs.pop('content_node_xpath', None)
 
         self.config = config or Configuration()
         self.config = extend_config(self.config, kwargs)
