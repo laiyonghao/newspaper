@@ -9,6 +9,7 @@ or query an lxml or soup dom object generated from an article's html.
 import logging
 import lxml.etree
 import lxml.html
+import lxml.html.soupparser
 import lxml.html.clean
 import re
 from html import unescape
@@ -68,8 +69,16 @@ class Parser(object):
             cls.doc = lxml.html.fromstring(html)
             return cls.doc
         except Exception:
-            log.warn('fromstring() returned an invalid string: %s...', html[:20])
-            return
+            try:
+                # Using the `lxml.html.soupparser` for better compatibility
+                doc = lxml.html.soupparser.fromstring(html)
+                cls.doc = lxml.html.fromstring(
+                    lxml.html.tostring(doc)
+                )
+                return cls.doc
+            except Exception:
+                log.warn('fromstring() returned an invalid string: %s...', html[:20])
+                return
 
     @classmethod
     def clean_article_html(cls, node):
