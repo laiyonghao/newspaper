@@ -269,12 +269,13 @@ class Article(object):
             self.url,
             self.clean_doc)
 
-        # Before any computations on the body, clean DOM object
-        self.doc = document_cleaner.clean(self.doc)
-
         if self.content_node_xpath and (
                 nodes := self.doc.xpath(self.content_node_xpath)):
             self.top_node = document_cleaner.remove_scripts_styles(nodes[0])
+
+        # Before any computations on the body, clean DOM object
+        self.doc = document_cleaner.clean(self.doc)
+
         if self.top_node is None:
             self.top_node = self.extractor.calculate_best_node(self.doc)
         if self.top_node is not None:
