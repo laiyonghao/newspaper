@@ -273,9 +273,9 @@ class Article(object):
         self.doc = document_cleaner.clean(self.doc)
 
         if self.content_node_xpath and (
-                nodes := self.clean_doc.xpath(self.content_node_xpath)):
+                nodes := self.doc.xpath(self.content_node_xpath)):
             self.top_node = document_cleaner.remove_scripts_styles(nodes[0])
-        else:
+        if self.top_node is not None:
             self.top_node = self.extractor.calculate_best_node(self.doc)
         if self.top_node is not None:
             video_extractor = VideoExtractor(self.config, self.top_node)
